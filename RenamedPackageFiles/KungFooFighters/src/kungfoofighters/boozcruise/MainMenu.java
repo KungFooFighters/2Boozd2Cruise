@@ -125,6 +125,9 @@ public class MainMenu extends Activity {
     //Thises closes Activity A at the exit
     public void finishActivityA(View v) {
         MainMenu.this.finish();
+        SharedData.shared3 =0;
+        SharedData.shared2 =0;
+        SharedData.shared1 =0;
     }
     
    

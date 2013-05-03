@@ -1,5 +1,5 @@
 
-//ActivityB represents the Balance Ball test, which key features include the
+//Balance Ball represents the Balance Ball test, which key features include the
  
 //Accelerometer and keep tracking of the position of the ball with time.
 //The basic premise is that you tilt the phone to keep the ball at the center

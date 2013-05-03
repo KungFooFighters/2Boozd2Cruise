@@ -135,6 +135,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         //the screensize is obtained
     	setPix();
+    	
     	// the number of questions passed, correctly answered and incorrectly answered are set to zero.
     	this.NumPassed = 0; this.NumCorrect = 0; this.NumWrong = 0;
         setContentView(R.layout.activity_main);
@@ -142,7 +143,8 @@ public class MainActivity extends Activity {
         //The editable text field for the user to enter answers is set to only accept numbers
         EditText answerField = (EditText)findViewById(R.id.answer_field);
         answerField.setInputType(InputType.TYPE_CLASS_NUMBER);
-        
+        //reset user score to zero
+        MathScore = 0;
         //The users score is updated
         updateScoreField();
         //The time remaining is updated (should be the maximum time)
@@ -179,18 +181,20 @@ public class MainActivity extends Activity {
     		//update the users score constantly
     		TextView sField = (TextView)findViewById(R.id.scoreField);
     		//score calculated as 15 for correct answers, -5 for wrong answers and 0 for passed questions
-    		MathScore = correctMultiplier*NumCorrect + wrongMultiplier*NumWrong + passedMultiplier*NumPassed;
-    		SharedData.shared3 = (int) MathScore ;
-    		//do not allow the users score to go below zero. Set the text color to red if the users score is zero
-    		if (MathScore <= 0) {
-    			sField.setTextColor(getResources().getColor(R.color.red));
-    			MathScore = 0;
+    		if (MathRemainingTime > 0) {
+    			MathScore = correctMultiplier*NumCorrect + wrongMultiplier*NumWrong + passedMultiplier*NumPassed;    		
+    			//do not allow the users score to go below zero. Set the text color to red if the users score is zero
+    			if (MathScore <= 0) {
+    				sField.setTextColor(getResources().getColor(R.color.red));
+    				MathScore = 0;
+    			}
+    			//if the users score is not zero, set the text color to black
+    			else {
+    				sField.setTextColor(getResources().getColor(R.color.black));
+    			}    		
+    			SharedData.shared3 = (int) MathScore ;
     		}
-    		//if the users sccore is not zero, set the text color to black
-    		else {
-    			sField.setTextColor(getResources().getColor(R.color.black));
-    		}
-    		//after calculating the score and changing the text color accordingly, display the new sccore
+    		//after calculating the score and changing the text color accordingly, display the new score
     		updateScoreField();
     		//Need to update the remaining time constantly
     		TextView tField = (TextView)findViewById(R.id.timeField);
@@ -207,7 +211,7 @@ public class MainActivity extends Activity {
     		//also starts updating.
     		else if (MathRunTime >= 5 && MathRemainingTime > 0) {
     			hideGetReady();
-    			//If the user has more than 10 seconds left, the text color is blacl
+    			//If the user has more than 10 seconds left, the text color is black
     			if (MathRemainingTime > 10) {
     				tField.setTextColor(getResources().getColor(R.color.black));
     				updateTimeField();
@@ -234,6 +238,7 @@ public class MainActivity extends Activity {
     	this.MathRemainingTime = this.MathSessionTime - this.MathRunTime;
     	//update the users statistics
     	updateStatsField(Integer.toString(MathRemainingTime));
+    	
     }
     //what happens when the user presses pass
     public void passQuestion(View view) {    	
